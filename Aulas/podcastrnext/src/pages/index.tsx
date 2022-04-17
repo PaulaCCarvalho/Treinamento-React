@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import { format, parseISO} from 'date-fns';
 import ptBR from "date-fns/locale/pt-BR";
@@ -8,6 +8,7 @@ import { convertDurationToTimeString } from "../utils/convertDurationToTimeStrin
 import styles from './home.module.scss';
 import Image from 'next/image';
 import Link from 'next/link'
+import { PlayerContext } from "../contexts/PlayerContext";
 
 
 type Episode = {
@@ -33,10 +34,12 @@ export default function Home({latestEpisodes, allEpisodes}: HomeProps) {
     setIsSSR(false)
   },[])
 
+  const { play } = useContext(PlayerContext)
+
   return (
     <div className={styles.homepage}>
       <section className={styles.latestEpisodes}>
-        <h2>Últimos lançamentos</h2>
+        <h2>Últimos lançamentos </h2>
 
         <ul>
           {latestEpisodes.map(episode => {
@@ -62,7 +65,7 @@ export default function Home({latestEpisodes, allEpisodes}: HomeProps) {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button">
+                <button type="button" onClick={() => play(episode)}>
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
@@ -164,3 +167,7 @@ export const getStaticProps: GetStaticProps = async () =>{
     revalidate: 60 * 60 * 8,
   }
 }
+function play(episode: Episode): void {
+  throw new Error("Function not implemented.");
+}
+
